@@ -3,3 +3,8 @@
 ################################################################################
 
 /WSW/bin
+/WSW/WSW.csproj.user
+/WSW/ReadMe.txt
+/WSW/obj
+/.vs/WSW/v14/.suo
+/WSW/GlobalSuppressions.cs
