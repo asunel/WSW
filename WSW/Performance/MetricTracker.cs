@@ -1,9 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-
-namespace WSW.Performance
+﻿namespace WSW.Performance
 {
+    using System;
+    using System.Diagnostics;
+    using System.Reflection;
+
     public sealed class MetricTracker : IDisposable
     {
         private readonly string _methodName;

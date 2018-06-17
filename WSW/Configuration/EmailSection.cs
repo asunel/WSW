@@ -1,10 +1,10 @@
-﻿using System.Configuration;
-
-namespace WSW.Configuration
+﻿namespace WSW.Configuration
 {
+    using System.Configuration;
+
     public class EmailSection : ConfigurationSection
     {
-        public class EmailSectionProperties
+        private static class EmailSectionProperties
         {
             internal const string FromMailAddress = "fromMailAddress";
             internal const string FromDisplayName = "fromDisplayName";
@@ -16,28 +16,28 @@ namespace WSW.Configuration
             internal const string TimeoutInMilliseconds = "timeoutInMilliseconds";
         }
 
-        [ConfigurationProperty(EmailSectionProperties.FromMailAddress)]
+        [ConfigurationProperty(EmailSectionProperties.FromMailAddress, IsRequired = true)]
         public string FromMailAddress => (string)this[EmailSectionProperties.FromMailAddress];
 
-        [ConfigurationProperty(EmailSectionProperties.FromDisplayName)]
+        [ConfigurationProperty(EmailSectionProperties.FromDisplayName, IsRequired = true)]
         public string FromDisplayName => (string)this[EmailSectionProperties.FromDisplayName];
 
-        [ConfigurationProperty(EmailSectionProperties.ToMailAddress)]
+        [ConfigurationProperty(EmailSectionProperties.ToMailAddress, IsRequired = true)]
         public string ToMailAddress => (string)this[EmailSectionProperties.ToMailAddress];
 
-        [ConfigurationProperty(EmailSectionProperties.ToDisplayName)]
+        [ConfigurationProperty(EmailSectionProperties.ToDisplayName, IsRequired = true)]
         public string ToDisplayName => (string)this[EmailSectionProperties.ToDisplayName];
 
-        [ConfigurationProperty(EmailSectionProperties.Host)]
+        [ConfigurationProperty(EmailSectionProperties.Host, IsRequired = true)]
         public string Host => (string)this[EmailSectionProperties.Host];
 
-        [ConfigurationProperty(EmailSectionProperties.Port)]
+        [ConfigurationProperty(EmailSectionProperties.Port, IsRequired = true)]
         public int Port => (int)this[EmailSectionProperties.Port];
 
-        [ConfigurationProperty(EmailSectionProperties.EnableSsl)]
+        [ConfigurationProperty(EmailSectionProperties.EnableSsl, IsRequired = true)]
         public bool EnableSsl => (bool)this[EmailSectionProperties.EnableSsl];
 
-        [ConfigurationProperty(EmailSectionProperties.TimeoutInMilliseconds)]
+        [ConfigurationProperty(EmailSectionProperties.TimeoutInMilliseconds, IsRequired = true)]
         public int TimeoutInMilliseconds => (int)this[EmailSectionProperties.TimeoutInMilliseconds];
     }
 }

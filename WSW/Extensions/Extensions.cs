@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using WSW.Performance;
-
-namespace WSW.Extensions
+﻿namespace WSW.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Web.UI;
+    using System.Web.UI.HtmlControls;
+    using WSW.Performance;
+
     public static class Extensions
     {
         public static List<TSource> ToListCasted<TSource>(this ConfigurationElementCollection source)
@@ -36,10 +36,7 @@ namespace WSW.Extensions
                 {
                     table.Rows.Add(new HtmlTableRow
                     {
-                        Cells = {
-                    new HtmlTableCell { InnerHtml = item.Key },
-                    new HtmlTableCell { InnerHtml = item.Value }
-                    },
+                        Cells = { new HtmlTableCell { InnerHtml = item.Key }, new HtmlTableCell { InnerHtml = item.Value } },
                         BgColor = isFirstItem ? Constants.HeaderColor : (flag ? Constants.Grey : Constants.White)
                     });
 

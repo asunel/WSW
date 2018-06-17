@@ -1,21 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Management;
-using System.Threading;
-using System.Xml;
-using System.Xml.Linq;
-using WSW.Extensions;
-using WSW.SC;
-using WSW.Performance;
-using System.Reflection;
-using WSW.Configuration;
-
-namespace WSW
+﻿namespace WSW
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Management;
+    using System.Reflection;
+    using System.Threading;
+    using System.Xml;
+    using System.Xml.Linq;
+    using Configuration;
+    using Extensions;
+    using Performance;
+    using SC;
+
     public static class Utils
     {
         public static Dictionary<string, string> GetDictionary(string headerColumn1, string headerColumn2, ServiceController[] services)
@@ -64,9 +64,9 @@ namespace WSW
 
                 var dic = new Dictionary<string, string>
                 {
-                    {"Property".Bold(), "Value".Bold() },
-                    {"Machine", Environment.MachineName },
-                    { "Username", System.Security.Principal.WindowsIdentity.GetCurrent().Name },
+                    {"Property".Bold(), "Value".Bold()},
+                    {"Machine", Environment.MachineName},
+                    {"Username", System.Security.Principal.WindowsIdentity.GetCurrent().Name},
                 };
 
                 properties.ForEach(prop => dic.Add(prop, (managementObj[prop] == null) ? string.Empty : managementObj[prop].ToString()));
@@ -91,6 +91,7 @@ namespace WSW
                 return allConfigPaths;
             }
         }
+
         public static List<KeyVal<string, Dictionary<string, string>>> GetOtherThanExeConfigData(string[] configFilePaths)
         {
             using (MetricTracker.Track(MethodBase.GetCurrentMethod()))
@@ -99,7 +100,7 @@ namespace WSW
 
                 foreach (var configPath in configFilePaths)
                 {
-                    var dicConfigData = new Dictionary<string, string> {{"Node".Bold(), "Value".Bold()}};
+                    var dicConfigData = new Dictionary<string, string> { { "Node".Bold(), "Value".Bold() } };
 
                     if (!File.Exists(configPath)) continue;
                     var document = XDocument.Load(configPath);
@@ -149,7 +150,7 @@ namespace WSW
                 }
                 else if (pathInfo == Constants.PathInfoEnum.File)
                 {
-                    configFilePaths = configFilePaths.Concat(new[] {Path.GetFullPath(fullPath)}).ToArray();
+                    configFilePaths = configFilePaths.Concat(new[] { Path.GetFullPath(fullPath) }).ToArray();
                 }
             }
 

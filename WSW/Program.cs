@@ -1,13 +1,10 @@
-﻿using System;
-using System.ServiceProcess;
-
-namespace WSW
+﻿namespace WSW
 {
+    using System;
+    using System.ServiceProcess;
+
     internal class Program : WswService
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         private static void Main(string[] args)
         {
             var service = new Program();

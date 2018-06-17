@@ -1,12 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Mail;
-using System.Reflection;
-using WSW.Performance;
-
-namespace WSW.Email
+﻿namespace WSW.Email
 {
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Mail;
+    using System.Reflection;
+    using WSW.Performance;
+
     class MailSender
     {
         public static bool SendMail(EmailData emailData, string source)

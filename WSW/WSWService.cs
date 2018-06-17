@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.ServiceProcess;
-using System.Threading;
-using System.Threading.Tasks;
-using WSW.Configuration;
-using WSW.Email;
-using WSW.Extensions;
-using WSW.Performance;
-using ServiceController = WSW.SC.ServiceController;
-using EventRecord = WSW.EventViewer.EventRecord;
-
-namespace WSW
+﻿namespace WSW
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Configuration;
+    using System.Diagnostics;
+    using System.Diagnostics.Eventing.Reader;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.ServiceProcess;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using WSW.Configuration;
+    using WSW.Email;
+    using WSW.Extensions;
+    using WSW.Performance;
+    using EventRecord = WSW.EventViewer.EventRecord;
+    using ServiceController = WSW.SC.ServiceController;
+
     public partial class WswService : ServiceBase
     {
-        private Thread _thread;
         private static readonly object LockConfig = new object();
         private static readonly WswConfig Config = WswConfig.Instance;
+        private Thread _thread;
 
         public WswService()
         {
@@ -36,7 +36,7 @@ namespace WSW
             _thread.Start();
         }
 
-        public void RunEachServiceMonitorTaskInParallel()
+        private void RunEachServiceMonitorTaskInParallel()
         {
             var tasks = new List<Task>();
 
@@ -48,7 +48,7 @@ namespace WSW
             Task.WaitAll(tasks.ToArray());
         }
 
-        public static void StartMonitoring(string category, Service svc)
+        private static void StartMonitoring(string category, Service svc)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace WSW
                                 try
                                 {
                                     // Must provide a timeout, otherwise it will wait for Running status infinitely
-                                    sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 5));
+                                    sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, svc.WaitTimeoutForStart));
 
                                     // Since we reached here, means timeout occured and hence service has been started successfully
                                     // It means an Information log entry will be created in Event Viewer
@@ -117,7 +117,7 @@ namespace WSW
                             // Prepare the body HTML
                             var body = PrepareMailBody(sc, eventRecord, configFilePaths);
 
-                            var isMailSent = TriggerMail(category, Constants.WswService, svc.Name, eventLevel == StandardEventLevel.Informational, body);
+                            var isMailSent = TriggerMail(Constants.WswService, svc.Name, eventLevel == StandardEventLevel.Informational, body);
                             UpdateIsMailSentFlag(category, svc.Name, isMailSent);
                             desiredStatus = ServiceControllerStatus.Running;
                         }
@@ -143,19 +143,23 @@ namespace WSW
             _thread.Abort();
         }
 
-        public static string PrepareMailBody(ServiceController sc, EventRecord eventRecord, string[] configFilePaths)
+        private static string PrepareMailBody(ServiceController sc, EventRecord eventRecord, string[] configFilePaths)
         {
             return string.Join(Constants.HtmlBrTag,
-                 Utils.ToDictionary("Property", "Value", eventRecord).ToHtml("Event Log"),
-                 Utils.GetDictionary("Service Name", "Status", sc.DependentServices).ToHtml("Dependent Services"),
-                 Utils.GetDictionary("Service Name", "Status", sc.ServicesDependedOn).ToHtml("Service Depends On"),
-                 sc.GetExeConfigData().ToHtml(string.Format(Constants.FileHyperlinkFormat, sc.ImagePath + Constants.ConfigExtension, Path.GetFileName(sc.ImagePath) + Constants.ConfigExtension)),
-                 Utils.GetServiceGeneralInfo(sc).ToHtml($"{sc.ServiceName}"),
-                 string.Join(Constants.HtmlBrTag, Utils.GetOtherThanExeConfigData(configFilePaths).Select(dic => dic.Value.ToHtml(string.Format(Constants.FileHyperlinkFormat, dic.Id, Path.GetFileName(dic.Id)))).ToArray())
-                 );
+                Utils.ToDictionary("Property", "Value", eventRecord).ToHtml("Event Log"),
+                Utils.GetDictionary("Service Name", "Status", sc.DependentServices).ToHtml("Dependent Services"),
+                Utils.GetDictionary("Service Name", "Status", sc.ServicesDependedOn).ToHtml("Service Depends On"),
+                sc.GetExeConfigData().ToHtml(string.Format(Constants.FileHyperlinkFormat,
+                    sc.ImagePath + Constants.ConfigExtension,
+                    Path.GetFileName(sc.ImagePath) + Constants.ConfigExtension)),
+                Utils.GetServiceGeneralInfo(sc).ToHtml($"{sc.ServiceName}"),
+                string.Join(Constants.HtmlBrTag,
+                    Utils.GetOtherThanExeConfigData(configFilePaths).Select(dic =>
+                        dic.Value.ToHtml(string.Format(Constants.FileHyperlinkFormat, dic.Id,
+                            Path.GetFileName(dic.Id)))).ToArray()));
         }
 
-        public static bool TriggerMail(string category, string source, string serviceName, bool isStartSuccess, string body)
+        private static bool TriggerMail(string source, string serviceName, bool isStartSuccess, string body)
         {
             using (MetricTracker.Track(MethodBase.GetCurrentMethod()))
             {
@@ -184,7 +188,13 @@ namespace WSW
             }
         }
 
-        public static void UpdateIsMailSentFlag(string category, string serviceName, bool isMailSent)
+        /// <summary>
+        /// Updates Mail sent flag in service xml
+        /// </summary>
+        /// <param name="category">Service category</param>
+        /// <param name="serviceName">Sevice name</param>
+        /// <param name="isMailSent">Indicates if the mail has been sent</param>
+        private static void UpdateIsMailSentFlag(string category, string serviceName, bool isMailSent)
         {
             using (MetricTracker.Track(MethodBase.GetCurrentMethod()))
             {
@@ -205,10 +215,19 @@ namespace WSW
                 }
             }
         }
-        private static Service LoopTillExpectationMeets(string category, string serviceName, bool expectedState, bool loopInfinitely)
+
+        /// <summary>
+        /// Look for the expected change infinitely or for the specified times.
+        /// </summary>
+        /// <param name="category">Service Category</param>
+        /// <param name="serviceName">Service Name</param>
+        /// <param name="expectedState">Expected state</param>
+        /// <param name="isLoopInfinitely">Whether loop infinetely or not</param>
+        /// <returns></returns>
+        private static Service LoopTillExpectationMeets(string category, string serviceName, bool expectedState, bool isLoopInfinitely)
         {
             Service serviceObj = null;
-            var i = loopInfinitely ? 0 : 1;
+            var i = isLoopInfinitely ? 0 : 1;
 
             while (true)
             {
@@ -223,9 +242,17 @@ namespace WSW
                     if (i == 1) break;
                 }
             }
+
             return serviceObj;
         }
 
+        /// <summary>
+        /// In case WSW service is restarted for any reason, then it will check if the mail has already been sent for the currently stopped
+        /// window services or not.
+        /// </summary>
+        /// <param name="sc">Service Controller instance</param>
+        /// <param name="svc">Service instance</param>
+        /// <returns></returns>
         private static bool IsMailAlreadySent(ServiceController sc, Service svc) => sc.Status == ServiceControllerStatus.Stopped && svc.IsMailSent;
     }
 }

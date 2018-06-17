@@ -1,7 +1,7 @@
-﻿using System.Configuration;
-
-namespace WSW.Configuration
+﻿namespace WSW.Configuration
 {
+    using System.Configuration;
+
     public class SecureSection : ConfigurationSection
     {
         private static class SecureSectionProperties
@@ -9,7 +9,7 @@ namespace WSW.Configuration
             internal const string FromMailPassword = "fromMailPassword";
         }
 
-        [ConfigurationProperty(SecureSectionProperties.FromMailPassword)]
+        [ConfigurationProperty(SecureSectionProperties.FromMailPassword, IsRequired = true)]
         public string FromMailPassword => (string)this[SecureSectionProperties.FromMailPassword];
     }
 }

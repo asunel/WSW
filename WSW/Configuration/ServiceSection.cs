@@ -1,9 +1,9 @@
-﻿using System;
-using System.Configuration;
-using WSW.Extensions;
-
-namespace WSW.Configuration
+﻿namespace WSW.Configuration
 {
+    using System;
+    using System.Configuration;
+    using WSW.Extensions;
+
     public class ServiceSection : ConfigurationSection
     {
         [ConfigurationProperty("", IsDefaultCollection = true)]
@@ -27,9 +27,13 @@ namespace WSW.Configuration
         }
 
         public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
+
         protected sealed override ConfigurationElement CreateNewElement() => new ServiceCategory();
+
         protected override Object GetElementKey(ConfigurationElement element) => ((ServiceCategory)element).Category;
+
         protected override string ElementName => ServiceCategoryCollectionElements.ServiceCategory;
+
         protected override void BaseAdd(ConfigurationElement element) => BaseAdd(element, false);
 
         public ServiceCategory this[int index]
@@ -47,8 +51,11 @@ namespace WSW.Configuration
         }
 
         public new ServiceCategory this[string key] => (ServiceCategory)BaseGet(key);
+
         public int IndexOf(ServiceCategory details) => BaseIndexOf(details);
+
         public void Add(ServiceCategory details) => BaseAdd(details);
+
         public void Remove(ServiceCategory details)
         {
             if (BaseIndexOf(details) >= 0)
@@ -56,49 +63,49 @@ namespace WSW.Configuration
         }
 
         public void RemoveAt(int index) => BaseRemoveAt(index);
+
         public void Remove(string name) => BaseRemove(name);
+
         public void Clear() => BaseClear();
     }
 
     public class ServiceCategory : ConfigurationElement
     {
-        private class ServiceCategoryProperties
+        private static class ServiceCategoryProperties
         {
             public const string Category = "category";
             public const string Services = "services";
         }
 
-        [ConfigurationProperty(ServiceCategoryProperties.Category)]
+        [ConfigurationProperty(ServiceCategoryProperties.Category, IsRequired = true)]
         public string Category => (string)this[ServiceCategoryProperties.Category];
 
-        [ConfigurationProperty(ServiceCategoryProperties.Services, IsDefaultCollection = false)]
+        [ConfigurationProperty(ServiceCategoryProperties.Services, IsDefaultCollection = false, IsRequired = true)]
         public ServiceCollection Services => (ServiceCollection)base[ServiceCategoryProperties.Services];
     }
 
     public class ServiceCollection : ConfigurationElementCollection
     {
-        private class ServiceCollectionProperties
-        {
-            internal const string WaitTimeoutForStartInSeconds = "waitTimeoutForStartInSeconds";
-        }
-
         private static class ServiceCollectionElements
         {
             internal const string Service = "service";
         }
 
         public new Service this[string key] => (IndexOf(key) < 0) ? null : (Service)BaseGet(key);
+
         public Service this[int index] => (Service)BaseGet(index);
-        public int IndexOf(string key) =>  this.ToListCasted<Service>().FindIndex(a => a.Name.ToLower() == key.ToLower());
+
+        public int IndexOf(string key) => this.ToListCasted<Service>().FindIndex(a => a.Name.ToLower() == key.ToLower());
 
         public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
-        protected override ConfigurationElement CreateNewElement() => new Service();
-        protected override object GetElementKey(ConfigurationElement element) => ((Service)element).Name;
-        protected override bool IsElementName(string elementName) => !string.IsNullOrEmpty(elementName) && elementName == ServiceCollectionElements.Service;
-        protected override string ElementName => ServiceCollectionElements.Service;
 
-        [ConfigurationProperty(ServiceCollectionProperties.WaitTimeoutForStartInSeconds, IsRequired = true)]
-        public int WaitTimeoutForStart => (int)base[ServiceCollectionProperties.WaitTimeoutForStartInSeconds];
+        protected override ConfigurationElement CreateNewElement() => new Service();
+
+        protected override object GetElementKey(ConfigurationElement element) => ((Service)element).Name;
+
+        protected override bool IsElementName(string elementName) => !string.IsNullOrEmpty(elementName) && elementName == ServiceCollectionElements.Service;
+
+        protected override string ElementName => ServiceCollectionElements.Service;
     }
 
     public class Service : ConfigurationElement
@@ -112,18 +119,19 @@ namespace WSW.Configuration
             internal const string EnableStart = "enableStart";
             internal const string IsMailSent = "isMailSent";
             internal const string OtherConfigs = "otherConfigs";
+            internal const string WaitTimeoutForStartInSeconds = "waitTimeoutForStartInSeconds";
         }
 
         [ConfigurationProperty(ServiceProperties.Name, IsRequired = true, IsKey = true)]
         public string Name => (string)this[ServiceProperties.Name];
 
-        [ConfigurationProperty(ServiceProperties.Source)]
+        [ConfigurationProperty(ServiceProperties.Source, IsRequired = true)]
         public string Source => (string)this[ServiceProperties.Source];
 
-        [ConfigurationProperty(ServiceProperties.LogName)]
+        [ConfigurationProperty(ServiceProperties.LogName, IsRequired = true)]
         public string LogName => (string)this[ServiceProperties.LogName];
 
-        [ConfigurationProperty(ServiceProperties.EnableNotification)]
+        [ConfigurationProperty(ServiceProperties.EnableNotification, IsRequired = true)]
         public bool EnableNotification => (bool)this[ServiceProperties.EnableNotification];
 
         [ConfigurationProperty(ServiceProperties.EnableStart, IsRequired = true)]
@@ -135,9 +143,11 @@ namespace WSW.Configuration
             get { return (bool)this[ServiceProperties.IsMailSent]; }
             set { this[ServiceProperties.IsMailSent] = value; }
         }
+
         [ConfigurationProperty(ServiceProperties.OtherConfigs, IsRequired = true)]
         public string OtherConfigs => (string)this[ServiceProperties.OtherConfigs];
+
+        [ConfigurationProperty(ServiceProperties.WaitTimeoutForStartInSeconds, IsRequired = true)]
+        public int WaitTimeoutForStart => (int)base[ServiceProperties.WaitTimeoutForStartInSeconds];
     }
 }
-
-

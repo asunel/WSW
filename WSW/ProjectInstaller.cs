@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration.Install;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WSW
+﻿namespace WSW
 {
+    using System.ComponentModel;
+    using System.Configuration.Install;
+
     [RunInstaller(true)]
     public partial class ProjectInstaller : System.Configuration.Install.Installer
     {
@@ -18,12 +13,10 @@ namespace WSW
 
         private void wswProcessInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-
         }
 
         private void wswInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-
         }
     }
 }

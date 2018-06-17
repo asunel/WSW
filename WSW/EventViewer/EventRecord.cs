@@ -1,11 +1,13 @@
-﻿using System;
-using static WSW.Constants;
-
-namespace WSW.EventViewer
+﻿namespace WSW.EventViewer
 {
+    using System;
+    using static WSW.Constants;
+
     public class EventRecord
     {
-        public EventRecord() { }
+        public EventRecord()
+        {
+        }
 
         public EventRecord(System.Diagnostics.Eventing.Reader.EventRecord rec)
         {
@@ -19,15 +21,20 @@ namespace WSW.EventViewer
         }
 
         public DateTime? TimeCreated { get; set; }
+
         public string Source { get; set; }
+
         public long EventId { get; set; }
+
         public string Message { get; set; }
 
         // Warning! Don't delete this zero-referenced property. It is used using reflection
         public string MessagePreview => Message == null ? string.Empty : Message.Split("\n.".ToCharArray())[0];
 
         public string Level { get; set; }
+
         public string Computer { get; set; }
+
         public string User { get; set; }
     }
 }
