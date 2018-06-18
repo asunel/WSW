@@ -61,7 +61,7 @@ Service settings can be configured in **serviceSettings.config.xml**
 
 **serviceCategory:** We can categories services using the category attribute.
 
-**services:** We can configure timeout value for restarting a windows service. It is applicable to all the services of that category using the **waitTimeoutForStartInSeconds** attribute.
+**services:** Collection of **service**.
 
 **service:** We can have multiple service elements in services collection.
 
@@ -73,4 +73,5 @@ Service settings can be configured in **serviceSettings.config.xml**
 | enableNotification | Enable/disable email notification for a service without restarting WSW.                                                                                                                                                                                                                                                               |
 | enableStart        | Enable/disable restart for a service without restarting WSW.                                                                                                                                                                                                                                                                          |
 | isMailSent         | If unfortunately WSW crashes or someone stops it, then after it gets restarted it needs to know whether email notification for currently stopped configured services has already been sent before WSW failure or not. This attribute helps WSW in deciding that. **DON’T CHANGE ITS VALUE MANUALLY. LET IT BE FALSE FOR THE FIRST TIME.** |
+| waitTimeoutForStartInSeconds| Timeout value for restarting a windows service																																																																					 |
 | otherConfigs       | Comma-separated relative paths of files/folders for other configuration files whose details needs to be part of the email notification                                                                                                                                                                                                |
