@@ -1,60 +1,29 @@
-# WSW: How to change configuration settings?
+# WSW
 
 ## Email
 WSW currently supports sending mail notification through following accounts:
 *	GMAIL
 *	OUTLOOK
 
-**File:** App.config
-
-**Configurable:** **configSource** attribute of **email** node.
-
-**Example:**
-
-```
-<email configSource="sections\email\gmail.config.xml"/>
-```
-
-Update following attributes of **email** node in **gmail.config.xml** / **outlook.config.xml**
+Update following attributes of **email** node in **mail.config.xml**
 
 | Attribute             | Meaning                                  |
 |-----------------------|------------------------------------------|
-| fromMailAddress       | Email address which sends email          |
+| fromMailAddress       | Mail sender address          			   |
 | fromDisplayName       | Display name for sending email address   |
-| toMailAddress         | Email Address which receives email       |
-| toDisplayName         | Display name for receiving email address |
+| toMailAddress         | Mail receiving comma-separated addresses |
 | enableSsl             | Enable SSL or not                        |
 | timeoutInMilliseconds | Timeout for sending email                |
 
 ## Password
 
-**File:** App.config
-
-**Configurable:** **configSource** attribute of **secure** node.
-
-**Example:**
-
-```
-<secure configSource="sections\secure\gmail.pass.config.xml"/>
-```
-
-Update following attributes of **email** node in **gmail.pass.config.xml** / **outlook.pass.config.xml**
-
-| Node        | Meaning                                                                                                           |
-|-------------|-------------------------------------------------------------------------------------------------------------------|
-| CipherValue | Text value in this node is the encrypted password. Replace **YOUR_ENCRYPTED_PASSWORD** placeholder with your password |
-
-Note: Above steps are for encrypted password, but if you want to use plain password, then comment the line 
-```
-<secure configSource="sections\secure\gmail.pass.config.xml"/>
-```
-
-and uncomment the below line in **App.config**. 
-Update your password in **fromMailPassword** attribute.
-
+In **App.config**. 
+Replace **YOUR_PASSWORD** with plain password.
 ```
 <!--<secure fromMailPassword="YOUR_PASSWORD"/>-->
 ```
+After first run, WSW.exe.config will contain the encrypted **secure** section. No need for plain password after that.
+
 
 ## Services
 Service settings can be configured in **serviceSettings.config.xml**

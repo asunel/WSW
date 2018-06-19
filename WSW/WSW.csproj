@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -100,18 +101,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configuration\sections\secure\outlook.pass.config.xml" />
-    <Content Include="Configuration\sections\secure\gmail.pass.config.xml" />
-    <Content Include="Configuration\sections\email\outlook.config.xml" />
-    <Content Include="Configuration\sections\email\gmail.config.xml" />
-    <Content Include="Configuration\sections\service\serviceSettings.config.xml" />
-    <Content Include="Configuration\sections\service\serviceSettings.config1.xml" />
+    <Content Include="Configuration\config\mail.config.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Configuration\config\serviceSettings.config.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)WSW\Configuration\sections" "$(TargetDir)\sections\" /S /Y</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)WSW\Configuration\config" "$(TargetDir)\config\" /S /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -18,10 +18,23 @@
         {
             lock (LockConfig)
             {
+                // If encrypted password rollback to plain password on service stop.
+                // Then, run in release mode and Project + Properties, Debug tab, turn off "Enable the Visual Studio hosting process".
                 EncryptConfigSection(Constants.SecureSection);
                 EmailSection = ConfigurationManager.GetSection(Constants.EmailSection) as EmailSection;
                 SecureSection = ConfigurationManager.GetSection(Constants.SecureSection) as SecureSection;
                 ServiceSection = ConfigurationManager.GetSection(Constants.ServiceSection) as ServiceSection;
+
+                if (EmailSection.FromMailAddress.EndsWith("@gmail.com", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    EmailSection.Host = Constants.EmailType.Gmail.Host;
+                    EmailSection.Port = Constants.EmailType.Gmail.Port;
+                }
+                else if (EmailSection.FromMailAddress.EndsWith(".com", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    EmailSection.Host = Constants.EmailType.Outlook.Host;
+                    EmailSection.Port = Constants.EmailType.Outlook.Port;
+                }
             }
         }
 

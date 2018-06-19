@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<serviceSection>
+  <serviceCategory category="YOUR_CATEGORY_1">
+    <services>
+      <service name="YOUR_SEREVICE_1_NAME" source="YOUR_SEREVICE_1_SOURCE"
+          logName="YOUT_SERVICE_1_LOG_NAME" enableNotification="true" enableStart="true"
+          isMailSent="false" waitTimeoutForStartInSeconds="5" otherConfigs="YOUR_COMMA_SEPARATED_CONFIG_FOLDERS_OR_FILES_OR_BOTH"/>
+    </services>
+  </serviceCategory>
+  <serviceCategory category="YOUR_CATEGORY_2">
+    <services>
+      <service name="YOUR_SEREVICE_2_NAME" source="YOUR_SEREVICE_2_SOURCE"
+          logName="YOUT_SERVICE_2_LOG_NAME" enableNotification="true" enableStart="true"
+          isMailSent="false" waitTimeoutForStartInSeconds="5" otherConfigs="YOUR_COMMA_SEPARATED_CONFIG_FOLDERS_OR_FILES_OR_BOTH"/>
+    </services>
+  </serviceCategory>
+</serviceSection>

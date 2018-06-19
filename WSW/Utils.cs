@@ -81,7 +81,7 @@
                 var allConfigPaths = new string[0];
                 try
                 {
-                    allConfigPaths = Directory.GetFiles(customConfigDirectoryPath);
+                    allConfigPaths = Directory.GetFiles(customConfigDirectoryPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".config") || s.EndsWith(".xml")).ToArray();
                 }
                 catch (Exception ex)
                 {

@@ -2,6 +2,28 @@
 {
     public class Constants
     {
+        public enum EmailAccount
+        {
+            None = 0,
+            Gmail = 1,
+            Outlook = 2
+        }
+
+        public static class EmailType
+        {
+            public static class Gmail
+            {
+                public static readonly string Host = "smtp.gmail.com";
+                public static readonly int Port = 587;
+            }
+
+            public static class Outlook
+            {
+                public static readonly string Host = "smtp-mail.outlook.com";
+                public static readonly int Port = 587;
+            }
+        }
+
         public enum PathInfoEnum
         {
             None = 0,

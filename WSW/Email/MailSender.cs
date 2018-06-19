@@ -16,7 +16,7 @@
                 try
                 {
                     var fromMailAddress = new MailAddress(emailData.FromMailAddress, emailData.FromDisplayName);
-                    var toMailAddress = new MailAddress(emailData.ToMailAddress, emailData.ToDisplayName);
+
                     using (var smtp = new SmtpClient
                     {
                         Host = emailData.Host,
@@ -28,13 +28,21 @@
                         Timeout = emailData.TimeOutInMilliseconds,
                     })
                     {
-                        using (var msg = new MailMessage(fromMailAddress, toMailAddress)
+                        using (var msg = new MailMessage()
                         {
+                            From = fromMailAddress,
                             Subject = emailData.Subject,
                             Body = emailData.Body,
                             IsBodyHtml = emailData.IsBodyHtml
                         })
                         {
+                            var toAddresses = emailData.ToMailAddress.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                            foreach (var address in toAddresses)
+                            {
+                                msg.To.Add(address.Trim());
+                            }
+
                             smtp.Send(msg);
                             EventLog.WriteEntry(source, emailData.Body, EventLogEntryType.Information, 0);
                             return true;

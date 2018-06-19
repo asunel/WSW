@@ -176,7 +176,6 @@
                     FromMailAddress = Config.EmailSection.FromMailAddress,
                     FromDisplayName = Config.EmailSection.FromDisplayName,
                     ToMailAddress = Config.EmailSection.ToMailAddress,
-                    ToDisplayName = Config.EmailSection.ToDisplayName,
                     FromMailPassword = Config.SecureSection.FromMailPassword,
                     Host = Config.EmailSection.Host,
                     Port = Config.EmailSection.Port,
