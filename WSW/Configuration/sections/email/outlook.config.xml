@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<email fromMailAddress="YOUR_OUTLOOK_ID"
-       fromDisplayName="YOUR_FROM_DISPLAY_NAME"
-       toMailAddress="YOUR_TO_EMAIL_ID"
-       toDisplayName="YOUR_FROM_DISPLAY_NAME"
-       host="smtp-mail.outlook.com"
-       port="587"
-       enableSsl="true"
-       timeoutInMilliseconds="10000"/>
